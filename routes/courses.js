@@ -3,14 +3,17 @@ const Course = require("../model/courses");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const courses = await Course.find();
+  const courses = await Course.find().populate("author");
   res.send(courses);
 });
 
 router.get("/:id", async (req, res) => {
   // to get query params from the request
   // req.query
-  const course = await Course.findById(req.params.id);
+  const course = await Course.findById(req.params.id).populate("author", {
+    name: 1,
+    _id: -1,
+  });
   res.send(course);
   //   res.send(`Request is made for following ${req.params.id}`);
 });
