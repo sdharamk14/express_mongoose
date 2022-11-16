@@ -9,6 +9,7 @@ const home = require("./routes/home");
 const genres = require("./routes/genres");
 const customers = require("./routes/customers");
 const authors = require("./routes/authors");
+const books = require("./routes/books");
 const dbConfig = require("./db/config");
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/api/courses", courses);
 app.use("/api/genres", genres);
 app.use("/api/customers", customers);
 app.use("/api/authors", authors);
+app.use("/api/books", books);
 
 app.listen(3000, () => {
   console.log("listening on port 3000");
