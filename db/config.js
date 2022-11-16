@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-mongoose
+const mongooseObj = mongoose
   .connect("mongodb://localhost/playground", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -8,5 +8,6 @@ mongoose
   .then(() => {
     console.log("connected to mongodb");
   })
-  .catch((err) => console.log("connection failed" + err.message)); 
+  .catch((err) => console.log("connection failed" + err.message));
 
+exports.mongooseObj;

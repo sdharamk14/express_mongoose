@@ -1,5 +1,5 @@
 const express = require("express");
-const Genre = require("../model/genres");
+const { Genre } = require("../model/genres");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -17,8 +17,12 @@ router.post("/", async (req, res) => {
     name: req.body.name,
   });
 
-  const result = await Genre.save(genreObj);
-  res.send(result);
+  try {
+    const result = await genreObj.save();
+    res.send(result);
+  } catch (err) {
+    res.send(err.message);
+  }
 });
 
 router.put("/:id", async (req, res) => {

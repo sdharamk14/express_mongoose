@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Customer = require("../model/customers");
+const { Customer } = require("../model/customers");
 
 router.get("/", async (req, res) => {
   const customers = await Customer.find();
@@ -15,10 +15,10 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   const customerObj = new Customer({
     name: req.body.name,
-    phone: req.body.phone
+    phone: req.body.phone,
   });
 
-  const result = await Customer.save(customerObj);
+  const result = await customerObj.save();
   res.send(result);
 });
 
@@ -28,7 +28,7 @@ router.put("/:id", async (req, res) => {
     {
       name: req.body.name,
       isGold: req.body.isGold,
-      phone: req.body.phone
+      phone: req.body.phone,
     },
     { new: true }
   );

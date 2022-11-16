@@ -8,10 +8,11 @@ const customerSchema = new mongoose.Schema({
   isGold: { type: Boolean, default: false },
   phone: {
     type: String,
-    required: true,
+    // required: true,
   },
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
 
-module.exports = Customer;
+exports.Customer = Customer;
+exports.customerSchema = customerSchema;
