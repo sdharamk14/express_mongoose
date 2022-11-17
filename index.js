@@ -23,10 +23,19 @@ const isUserAdmin = require("./middlewares/admin");
 const error = require("./middlewares/error");
 const app = express();
 
-// Handling uncaught exceptions
-process.on("uncaughtException", (ex) => {
-  console.log("Uncaught exception");
-  winston.error(ex.message, ex);
+// Handling uncaught exceptions - will use winston exception handle fn
+// process.on("uncaughtException", (ex) => {
+//   console.log("Uncaught exception -", ex.message);
+//   winston.error(ex.message, ex);
+//   process.exit(1);
+// });
+
+// Handling unhandled promise rejections
+process.on("unhandledRejection", (ex) => {
+  console.log("Unhandled rejection");
+  // winston.error(ex.message, ex);
+  //throw exception so window exception handle will catch it
+  throw ex;
 });
 
 winston.add(new winston.transports.File({ filename: "logfile.log" }));
@@ -35,6 +44,10 @@ winston.add(
     db: "mongodb://localhost/playground",
     level: "error",
   })
+);
+
+winston.exceptions.handle(
+  new winston.transports.File({ filename: "uncaughtExceptions.log" })
 );
 
 if (!config.get("jwtPrivateKey")) {
@@ -77,6 +90,7 @@ app.use((req, res, next) => {
 app.use("/api/users", users);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+//example for multiple middleware's
 // app.use("/api/courses", [authenticateUser, isUserAdmin], courses);
 app.use("/api/courses", authenticateUser, courses);
 app.use("/api/genres", authenticateUser, genres);
