@@ -12,9 +12,17 @@ const authors = require("./routes/authors");
 const books = require("./routes/books");
 const movies = require("./routes/movies");
 const rentals = require("./routes/rentals");
+const users = require("./routes/users");
+const auth = require("./routes/auth");
 
 const dbConfig = require("./db/config");
+const authenticateUser = require("./middlewares/auth");
 const app = express();
+
+if (!config.get("jwtPrivateKey")) {
+  console.error("JWT  secret key is not set");
+  process.exit(1);
+}
 
 // To check the application name is fetched based on env from config
 console.log(`Application Name: ${config.get("name")}`);
@@ -49,13 +57,15 @@ app.use((req, res, next) => {
 });
 
 app.use("/", home);
-app.use("/api/courses", courses);
-app.use("/api/genres", genres);
-app.use("/api/customers", customers);
-app.use("/api/authors", authors);
-app.use("/api/books", books);
-app.use("/api/movies", movies);
-app.use("/api/rentals", rentals);
+app.use("/api/users", users);
+app.use("/api/auth", auth);
+app.use("/api/courses", authenticateUser, courses);
+app.use("/api/genres", authenticateUser, genres);
+app.use("/api/customers", authenticateUser, customers);
+app.use("/api/authors", authenticateUser, authors);
+app.use("/api/books", authenticateUser, books);
+app.use("/api/movies", authenticateUser, movies);
+app.use("/api/rentals", authenticateUser, rentals);
 
 app.listen(3000, () => {
   console.log("listening on port 3000");
