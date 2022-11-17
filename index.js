@@ -17,6 +17,7 @@ const auth = require("./routes/auth");
 
 const dbConfig = require("./db/config");
 const authenticateUser = require("./middlewares/auth");
+const isUserAdmin = require("./middlewares/admin");
 const app = express();
 
 if (!config.get("jwtPrivateKey")) {
@@ -56,9 +57,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/", home);
+app.use("/", isUserAdmin, home);
+app.use("/api/users", users);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+// app.use("/api/courses", [authenticateUser, isUserAdmin], courses);
 app.use("/api/courses", authenticateUser, courses);
 app.use("/api/genres", authenticateUser, genres);
 app.use("/api/customers", authenticateUser, customers);
