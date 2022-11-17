@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const winston = require("winston");
 
 const mongooseObj = mongoose
   .connect("mongodb://localhost/playground", {
@@ -6,8 +7,9 @@ const mongooseObj = mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("connected to mongodb");
-  })
-  .catch((err) => console.log("connection failed" + err.message));
+    winston.info("connected to mongodb");
+  });
+//Not required as unhandled promise rejection is done on app level
+// .catch((err) => console.log("connection failed" + err.message));
 
 exports.mongooseObj;
